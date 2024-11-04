@@ -3,18 +3,20 @@ import Link from "next/link";
 import { ButtonMode } from "./Button-mode";
 import { NavbarUser } from "./Navbar-user";
 import { ButtonSignIn } from "./Button-signin";
+import { Button } from "./ui/button";
 
 export const Navbar = async () => {
     const session = await getAuthSession();
     return (
-        <div className="fixed inset-x-0 top-0 bg-background z-[10] h-fit border-b border-zinc-300 py-4 ">
+        <div className="fixed top-0 left-0 right-0 bg-chart-6 z-[10] h-fit border-b-2 border-card py-4 ">
             <div className="flex items-center justify-between h-full gap-2 px-8 mx-auto max-w-7xl">
-                <Link href={"/"} className="flex items-center gap-2">
-                    <p className="rounded-lg border-2 border-b-4 border-r-4 border-black px-2 py-1 text-xl font-bold transition-all hover:-translate-y-[2px] md:block dark:border-white">
+
+                <Button asChild variant="primary" size="primary">
+                    <Link href={"/"}>
                         QuizPro
-                    </p>
-                </Link>
-                <div className="flex items-center">
+                    </Link>
+                </Button>
+                <div className="flex items-center justify-center align-middle">
                     <ButtonMode className="mr-4" />
                     {session?.user ? (
                         <NavbarUser user={session.user} />

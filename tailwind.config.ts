@@ -48,8 +48,18 @@ const config: Config = {
   				'2': 'hsl(var(--chart-2))',
   				'3': 'hsl(var(--chart-3))',
   				'4': 'hsl(var(--chart-4))',
-  				'5': 'hsl(var(--chart-5))'
-  			}
+  				'5': 'hsl(var(--chart-5))',
+				'6': 'hsl(var(--chart-6))',
+  			},
+  			btn: {
+  				'primary': 'hsl(var(--btn-primary))',
+  				'primary-hover': 'hsl(var(--btn-primary-hover))',
+  			},
+			test: {
+				'1': 'hsl(var(--test-1))',
+				'2': 'hsl(var(--test-2))',
+				'3': 'hsl(var(--test-3))',
+			}
   		},
   		borderRadius: {
   			lg: 'var(--radius)',

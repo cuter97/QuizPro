@@ -7,6 +7,7 @@ import { ThemeProvider } from "@/components/providers/theme-provider";
 import { SessionProviderAuth } from "@/components/providers/session-provider";
 import { Navbar } from "@/components/Navbar";
 import { QueryProvider } from "@/components/providers/query-provider";
+import { Toaster } from "@/components/ui/toaster";
 
 const geistSans = localFont({
     src: "./fonts/GeistVF.woff",
@@ -42,6 +43,7 @@ export default function RootLayout({
                         <SessionProviderAuth>
                             <Navbar />
                             {children}
+                            <Toaster />
                         </SessionProviderAuth>
                     </ThemeProvider>
                 </QueryProvider>

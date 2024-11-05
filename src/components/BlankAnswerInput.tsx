@@ -1,11 +1,11 @@
 "use client"
 
-import { Fragment, useMemo } from "react";
+import { Dispatch, Fragment, SetStateAction, useMemo } from "react";
 import keyword_extractor from "keyword-extractor";
 
 type Props = {
     answer: string;
-    setBlankAnswer: React.Dispatch<React.SetStateAction<string>>;
+    setBlankAnswer: Dispatch<SetStateAction<string>>;
 };
 
 const blank = "_____";

@@ -11,10 +11,10 @@ export async function POST(req: Request, res: Response) {
     try {
         const session = await getAuthSession();
         if (!session?.user) {
-            return NextResponse.json({
-                error: "You must be logged in to create a game.",
-                status: 401,
-            });
+            return NextResponse.json(
+                { error: "You must be logged in to create a game." },
+                { status: 401 }
+            );
         }
         const body = await req.json();
         const { topic, type, amount } = quizCreationSchema.parse(body);
@@ -97,16 +97,12 @@ export async function POST(req: Request, res: Response) {
         if (error instanceof z.ZodError) {
             return NextResponse.json(
                 { error: error.issues },
-                {
-                    status: 400,
-                }
+                { status: 400 }
             );
         } else {
             return NextResponse.json(
                 { error: "An unexpected error occurred." },
-                {
-                    status: 500,
-                }
+                { status: 500 }
             );
         }
     }
@@ -116,20 +112,20 @@ export async function GET(req: Request, res: Response) {
     try {
         const session = await getAuthSession();
         if (!session?.user) {
-            return NextResponse.json({
-                error: "You must be logged in to create a game.",
-                status: 401,
-            });
+            return NextResponse.json(
+                { error: "You must be logged in to create a game." },
+                { status: 401 }
+            );
         }
 
         const url = new URL(req.url);
         const gameId = url.searchParams.get("gameId");
 
         if (!gameId) {
-            return NextResponse.json({
-                error: "You must provide a game id.",
-                status: 400,
-            });
+            return NextResponse.json(
+                { error: "You must provide a game id." },
+                { status: 400 }
+            );
         }
 
         const game = await prisma.game.findUnique({
@@ -138,21 +134,18 @@ export async function GET(req: Request, res: Response) {
         });
 
         if (!game) {
-            return NextResponse.json({
-                error: "Game not found.",
-                status: 404,
-            });
+            return NextResponse.json(
+                { error: "Game not found." },
+                { status: 404 }
+            );
         }
 
-        return NextResponse.json({
-            game,
-            status: 400,
-        });
+        return NextResponse.json({ game }, { status: 400, });
 
     } catch (error) {
-        return NextResponse.json({
-            error: "An unexpected error occurred.",
-            status: 500,
-        });
+        return NextResponse.json(
+            { error: "An unexpected error occurred." },
+            { status: 500, }
+        );
     }
 }

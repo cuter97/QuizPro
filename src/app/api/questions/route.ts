@@ -6,8 +6,6 @@ import { getQuestionsSchema } from "@/schema/questions";
 import { NextResponse } from "next/server";
 import { ZodError } from "zod";
 
-export const maxDuration = 500;
-
 export async function POST(req: Request, res: Response) {
     try {
         const session = await getAuthSession();
@@ -46,22 +44,19 @@ export async function POST(req: Request, res: Response) {
                 }
             );
         }
-        return NextResponse.json({
-            questions,
-            status: 200,
-        });
+        return NextResponse.json({ questions }, { status: 200 });
     } catch (error) {
         if (error instanceof ZodError) {
-            return NextResponse.json({
-                error: error.issues,
-                status: 400,
-            });
+            return NextResponse.json(
+                { error: error.issues },
+                { status: 400 }
+            );
         } else {
             console.error("gpt error", error);
-            return NextResponse.json({
-                error: "An unexpected error occurred.",
-                status: 500
-            });
+            return NextResponse.json(
+                { error: "An unexpected error occurred." },
+                { status: 500 }
+            );
         }
     }
 }

@@ -1,10 +1,10 @@
-'use client'
+'use server'
 
 import prisma from "@/lib/prisma";
 import { checkAnswerSchema } from "@/schema/questions";
 import { NextResponse } from "next/server";
 import { ZodError } from "zod";
-import { compareTwoStrings } from "string-similarity";
+import stringSimilarity from "string-similarity";
 
 export async function POST(req: Request, res: Response) {
     try {
@@ -12,10 +12,10 @@ export async function POST(req: Request, res: Response) {
         const { questionId, userInput } = checkAnswerSchema.parse(body);
         const question = await prisma.question.findUnique({ where: { id: questionId } });
         if (!question) {
-            return NextResponse.json({
-                message: "Question not found",
-                status: 404,
-            });
+            return NextResponse.json(
+                { message: "Question not found" },
+                { status: 404 }
+            );
         }
         await prisma.question.update({
             where: { id: questionId },
@@ -30,7 +30,7 @@ export async function POST(req: Request, res: Response) {
             return NextResponse.json({ isCorrect });
 
         } else if (question.questionType === "open_ended") {
-            let percentageSimilar = compareTwoStrings(
+            let percentageSimilar = stringSimilarity.compareTwoStrings(
                 question.answer.toLowerCase().trim(),
                 userInput.toLowerCase().trim()
             );
@@ -43,10 +43,10 @@ export async function POST(req: Request, res: Response) {
         }
     } catch (error) {
         if (error instanceof ZodError) {
-            return NextResponse.json({
-                message: error.issues,
-                status: 400,
-            });
+            return NextResponse.json(
+                { message: error.issues },
+                { status: 400 }
+            );
         }
     }
 }

@@ -1,8 +1,12 @@
 'use client'
 
+import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { z } from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useMutation } from '@tanstack/react-query'
+import axios, { AxiosError } from "axios"
 
 import { BookOpen, BrainCircuit, CopyCheck } from "lucide-react"
 
@@ -12,24 +16,66 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from "../ui/input"
 import { Button } from "../ui/button"
 import { Separator } from "../ui/separator"
+import { useToast } from "@/hooks/use-toast"
+import { LoadingQuestions } from "../LoadingQuestions"
 
 type Input = z.infer<typeof quizCreationSchema>
+type Props = {
+    topic: string;
+};
 
-export const QuizCreation = () => {
+export const QuizCreation = ({ topic: topicParam }: Props) => {
+    const router = useRouter();
+    const [showLoader, setShowLoader] = useState(false);
+    const [finishedLoading, setFinishedLoading] = useState(false);
+    const { toast } = useToast();
+
+    const { mutate: getQuestions, isPending } = useMutation({
+        mutationFn: async ({ amount, topic, type }: Input) => {
+            const response = await axios.post("/api/game", { amount, topic, type });
+            return response.data;
+        },
+    });
 
     const form = useForm<Input>({
         resolver: zodResolver(quizCreationSchema),
         defaultValues: {
-            topic: 'Math',
+            topic: topicParam,
             type: "mcq",
             amount: 3,
         },
     });
 
-    const onSubmit = (input: Input) => {
-        console.log(input)
+    const onSubmit = async (data: Input) => {
+        setShowLoader(true);
+        getQuestions(data, {
+            onError: (error) => {
+                setShowLoader(false);
+                if (error instanceof AxiosError) {
+                    if (error.response?.status === 500) {
+                        toast({
+                            title: "Error",
+                            description: "Something went wrong. Please try again later.",
+                            variant: "destructive",
+                        });
+                    }
+                }
+            },
+            onSuccess: ({ gameId }: { gameId: string }) => {
+                setFinishedLoading(true);
+                setTimeout(() => {
+                    if (form.getValues("type") === "mcq") {
+                        router.push(`/play/mcq/${gameId}`);
+                    } else if (form.getValues("type") === "open_ended") {
+                        router.push(`/play/open-ended/${gameId}`);
+                    }
+                }, 2000);
+            },
+        });
     }
     form.watch();
+
+    if (showLoader) return <LoadingQuestions finished={finishedLoading} />;
 
     return (
         <div className="flex items-center justify-center min-h-screen">
@@ -85,8 +131,8 @@ export const QuizCreation = () => {
                             <div className="flex justify-between">
                                 <Button
                                     variant={
-                                        form.getValues("type") === "mcq" 
-                                            ? "btnPrimary" 
+                                        form.getValues("type") === "mcq"
+                                            ? "btnPrimary"
                                             : "btnSecondary"
                                     }
                                     size="btnPrimary"
@@ -98,7 +144,7 @@ export const QuizCreation = () => {
                                 >
                                     <CopyCheck className="w-4 h-4 mr-2" /> Multiple Choice
                                 </Button>
-                                <Separator orientation="vertical" color="border"/>
+                                <Separator orientation="vertical" color="border" />
                                 <Button
                                     variant={
                                         form.getValues("type") === "open_ended"
@@ -113,7 +159,7 @@ export const QuizCreation = () => {
                                     <BookOpen className="w-4 h-4 mr-2" /> Open Ended
                                 </Button>
                             </div>
-                            <Button type="submit" variant="primary" size="primary" className="text-md bg-chart-2 text-primary-foreground">Submit</Button>
+                            <Button disabled={isPending} type="submit" variant="primary" size="primary" className="text-md bg-chart-2 text-primary-foreground">Submit</Button>
                         </form>
                     </Form>
                 </CardContent>

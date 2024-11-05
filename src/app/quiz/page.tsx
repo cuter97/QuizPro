@@ -7,12 +7,18 @@ export const metadata = {
     description: "Quiz yourself on anything!",
 };
 
-export default async function QuizPage() {
+interface Props {
+    searchParams: {
+        topic?: string;
+    };
+}
+
+export default async function QuizPage({ searchParams }: Props) {
     const session = await getAuthSession();
 
     if (!session?.user) redirect("/");
-    
+
     return (
-        <QuizCreation />
+        <QuizCreation topic={searchParams.topic ?? ""} />
     );
 }

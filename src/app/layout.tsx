@@ -6,6 +6,7 @@ import localFont from "next/font/local";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { SessionProviderAuth } from "@/components/providers/session-provider";
 import { Navbar } from "@/components/Navbar";
+import { QueryProvider } from "@/components/providers/query-provider";
 
 const geistSans = localFont({
     src: "./fonts/GeistVF.woff",
@@ -31,17 +32,19 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body className={`${geistSans.variable} ${geistMono.variable} antialiased dark:bg-background`}>
-                <ThemeProvider
-                    attribute="class"
-                    defaultTheme="system"
-                    enableSystem
-                    disableTransitionOnChange
-                >
-                    <SessionProviderAuth>
-                        <Navbar />
-                        {children}
-                    </SessionProviderAuth>
-                </ThemeProvider>
+                <QueryProvider>
+                    <ThemeProvider
+                        attribute="class"
+                        defaultTheme="system"
+                        enableSystem
+                        disableTransitionOnChange
+                    >
+                        <SessionProviderAuth>
+                            <Navbar />
+                            {children}
+                        </SessionProviderAuth>
+                    </ThemeProvider>
+                </QueryProvider>
             </body>
         </html >
     );

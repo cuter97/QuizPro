@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui
 
 export const ActivityCard = () => {
     return (
-        <Card className="col-span-4 lg:col-span-3">
+        <Card className="col-span-4 lg:col-span-3 hover:-translate-y-[2px]">
             <CardHeader>
                 <CardTitle className="text-2xl font-bold">
                     <Link href="/history">Recent Activity</Link>

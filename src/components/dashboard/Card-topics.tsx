@@ -1,5 +1,6 @@
 import React from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
+import { WordlCloud } from '../WordlCloud'
 
 export const TopicsCard = () => {
     return (
@@ -12,7 +13,7 @@ export const TopicsCard = () => {
             </CardHeader>
             <CardContent className="pl-2">
                 {/* <WordCloud formattedTopics={formattedTopics} /> */}
-                palabras
+                <WordlCloud />
             </CardContent>
         </Card>
     )

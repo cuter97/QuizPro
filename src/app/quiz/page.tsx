@@ -1,8 +1,18 @@
+import { QuizCreation } from "@/components/forms/QuizCreation";
+import { getAuthSession } from "@/lib/nextauth";
+import { redirect } from "next/navigation";
 
-export default function QuizPage() {
+export const metadata = {
+    title: "Quiz | QuizPro",
+    description: "Quiz yourself on anything!",
+};
+
+export default async function QuizPage() {
+    const session = await getAuthSession();
+
+    if (!session?.user) redirect("/");
+    
     return (
-        <div>
-            <h1>Quiz Page</h1>
-        </div>
+        <QuizCreation />
     );
 }

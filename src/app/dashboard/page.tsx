@@ -16,7 +16,7 @@ export default async function DashboardPage() {
     if (!session?.user) redirect("/");
 
     return (
-        <main className="px-8 pt-32 mx-auto max-w-7xl">
+        <main className="px-8 pt-28 mx-auto max-w-7xl">
             <div className="flex items-center">
                 <h2 className="mr-2 text-3xl font-bold tracking-tight">Dashboard</h2>
             </div>

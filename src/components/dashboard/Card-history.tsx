@@ -8,7 +8,7 @@ export const HistoryCard = () => {
     const router = useRouter();
     return (
         <Card
-            className="hover:cursor-pointer hover:opacity-75"
+            className="hover:cursor-pointer hover:opacity-75 hover:-translate-y-[2px]"
             onClick={() => {
                 router.push("/history");
             }}

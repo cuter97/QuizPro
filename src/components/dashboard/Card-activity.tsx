@@ -1,9 +1,16 @@
 import Link from "next/link"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card"
+import { getAuthSession } from "@/lib/nextauth";
+import { redirect } from "next/navigation";
+import { HistoryGames } from "../HistoryGames";
 
-export const ActivityCard = () => {
+export const ActivityCard = async () => {
+    const session = await getAuthSession();
+
+    if (!session?.user) return redirect("/");
+    
     return (
-        <Card className="col-span-4 lg:col-span-3 hover:-translate-y-[2px]">
+        <Card className="col-span-4 lg:col-span-3">
             <CardHeader>
                 <CardTitle className="text-2xl font-bold">
                     <Link href="/history">Recent Activity</Link>
@@ -13,8 +20,7 @@ export const ActivityCard = () => {
                 </CardDescription>
             </CardHeader>
             <CardContent className="max-h-[580px] overflow-scroll">
-                {/* <HistoryComponent limit={10} userId={session.user.id} /> */}
-                history component
+                <HistoryGames limit={10} userId={session.user.id} />
             </CardContent>
         </Card>
     )
